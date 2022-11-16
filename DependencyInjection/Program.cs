@@ -15,19 +15,19 @@ namespace Strategy
     {
         static void Main(string[] args) {
             //Duck Example
-            var duck = new Context();
-            duck.SetStrategy(new ConcreteStrategyA());//SetStrategy() could be FlyingStrategy()
+            var duck = new Bird();
+            duck.FlyingStrategy(new FlyBackwardsStrategy());//SetStrategy() could be FlyingStrategy()
 
             //Generic Example
-            var someContext = new Context();
+            var someContext = new Bird();
 
             //Set Strategy set to normal sorting
-            someContext.SetStrategy(new ConcreteStrategyA());
-            someContext.SomeBusinessLogic();
+            duck.FlyingStrategy(new FlyBackwardsStrategy());
+            duck.Fly();
 
             //Set Strategy set to reverse sorting
-            someContext.SetStrategy(new ConcreteSrategyB());
-            someContext.SomeBusinessLogic();
+            duck.FlyingStrategy(new FlyForwardStrategy());
+            duck.Fly();
         }
     }
 
@@ -36,7 +36,7 @@ namespace Strategy
         object DoAlgorithm(object data);//Frequently changing code
     }
 
-   public class ConcreteStrategyA: IStrategy
+   public class FlyBackwardsStrategy: IStrategy
    {
         public object DoAlgorithm(object data)
         {
@@ -48,34 +48,33 @@ namespace Strategy
         }
     }
 
-    public class ConcreteSrategyB: IStrategy
+    public class FlyForwardStrategy: IStrategy
     {
         public object DoAlgorithm(object data)
         {
             var list = data as List<string>;
             list.Sort();
-            list.Reverse();
 
             return list;
         }
     }
 
-    public class Context 
+    public class Bird 
     {
         private IStrategy _strategy;
-        public Context() { }
+        public Bird() { }
 
-        public Context(IStrategy strategy) {
+        public Bird(IStrategy strategy) {
             _strategy = strategy;
         }
 
-        public void SetStrategy(IStrategy strategy) {
+        public void FlyingStrategy(IStrategy strategy) {
             this._strategy = strategy;
         }
 
-        public void SomeBusinessLogic() {
+        public void Fly() {
             Console.WriteLine("Context: Sorting (don't care how it's done)");
-            var result = this._strategy.DoAlgorithm(new List<string> { "a", "b", "c" });
+            var result = this._strategy.DoAlgorithm(new List<string> { "pond", "house", "beach" });
             Console.WriteLine(string.Join(", ", result));
         }
     }
